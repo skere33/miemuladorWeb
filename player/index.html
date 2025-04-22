@@ -226,23 +226,29 @@ Licensed under the MIT License (view LICENSE.md for more information)
 
     if (romURL) {
       fetch(romURL)
-        .then(res => res.arrayBuffer())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.arrayBuffer();
+        })
         .then(buffer => {
           try {
-            attachROM(buffer);
-            console.log("ROM cargada correctamente desde parámetro.");
-          } catch (err) {
-            console.error("Error al llamar a attachROM:", err);
+            attachROM(new Uint8Array(buffer));
+            console.log("ROM cargada correctamente desde la URL.");
+          } catch (e) {
+            console.error("Error al cargar la ROM:", e);
           }
         })
         .catch(err => {
-          console.error("Error al cargar ROM automáticamente:", err);
+          console.error("Error al obtener la ROM:", err);
         });
     } else {
-      console.warn("No se encontró el parámetro 'rom' en la URL.");
+      console.warn("No se proporcionó el parámetro 'rom' en la URL.");
     }
   });
 </script>
+
 
 
 </body>
