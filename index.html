@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Selecciona un juego</title>
+  <style>
+    body { font-family: sans-serif; background: #111; color: #fff; padding: 2rem; }
+    h1 { color: #0f0; }
+    ul { list-style: none; padding: 0; }
+    li { margin: 1rem 0; }
+    a { color: #0ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>🎮 Elige un juego GBA</h1>
+  <ul id="romList"></ul>
+
+  <script>
+    // Cambiá los nombres según los juegos reales que tenés
+    const roms = [
+      { name: "Pokémon Esmeralda", file: "pokemon.gba" },
+      { name: "Zelda Minish Cap", file: "zelda.gba" },
+      { name: "Mario Kart", file: "mariokart.gba" }
+    ];
+
+    const list = document.getElementById("romList");
+
+    roms.forEach(rom => {
+      const li = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = `player/index.html?rom=../binaries/roms/${rom.file}`;
+      link.textContent = rom.name;
+      li.appendChild(link);
+      list.appendChild(li);
+    });
+  </script>
+</body>
+</html>
