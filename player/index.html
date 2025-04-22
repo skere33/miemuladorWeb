@@ -220,36 +220,23 @@ Licensed under the MIT License (view LICENSE.md for more information)
     </script>
 
 <script>
-  window.addEventListener("load", () => {
-    const params = new URLSearchParams(window.location.search);
-    const romURL = params.get("rom");
+  const params = new URLSearchParams(window.location.search);
+  const romURL = params.get("rom");
 
-    if (romURL) {
-      fetch(romURL)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.arrayBuffer();
-        })
-        .then(buffer => {
-          try {
-            attachROM(new Uint8Array(buffer));
-            console.log("ROM cargada correctamente desde la URL.");
-          } catch (e) {
-            console.error("Error al cargar la ROM:", e);
-          }
-        })
-        .catch(err => {
-          console.error("Error al obtener la ROM:", err);
-        });
-    } else {
-      console.warn("No se proporcionó el parámetro 'rom' en la URL.");
-    }
-  });
+  if (romURL) {
+    fetch(romURL)
+      .then(res => res.arrayBuffer())
+      .then(buffer => {
+        console.log("ROM cargada desde URL:", romURL);
+        if (typeof attachROM === "function") {
+          attachROM(buffer); // usa la función del emulador
+        } else {
+          console.error("La función attachROM no existe.");
+        }
+      })
+      .catch(err => console.error("Error cargando la ROM:", err));
+  }
 </script>
-
-
 
 </body>
 
