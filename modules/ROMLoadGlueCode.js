@@ -80,3 +80,12 @@ function processDownload(parentObj, attachHandler) {
         attachHandler(dataArray);
     }
 }
+window.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    const romParam = params.get("rom");
+    if (romParam) {
+        downloadFile(romParam, function () {
+            processDownload(this, attachROM);
+        });
+    }
+});
