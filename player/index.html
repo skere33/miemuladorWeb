@@ -220,24 +220,27 @@ Licensed under the MIT License (view LICENSE.md for more information)
     </script>
 
 <script>
- window.addEventListener("load", () => {
+  window.addEventListener("load", () => {
     const params = new URLSearchParams(window.location.search);
     const romURL = params.get("rom");
-  
+
     if (romURL) {
-      fetch(romURL)
-        .then(res => res.arrayBuffer())
-        .then(buffer => {
-          if (typeof downloadFile === "function") {
-            const filename = romURL.split("/").pop();
-            downloadFile(buffer, filename);
-          } else {
-            console.error("No se encontró la función downloadFile");
-          }
-        })
-        .catch(err => console.error("Error al cargar ROM automáticamente:", err));
+      const checkReady = setInterval(() => {
+        if (typeof downloadFile === "function") {
+          clearInterval(checkReady);
+          fetch(romURL)
+            .then(res => res.arrayBuffer())
+            .then(buffer => {
+              const filename = romURL.split("/").pop();
+              downloadFile(buffer, filename);
+            })
+            .catch(err => console.error("Error al cargar ROM automáticamente:", err));
+        }
+      }, 500); // revisa cada medio segundo hasta que esté lista
     }
-  </script>
+  });
+</script>
+
 </body>
 
 </html>
